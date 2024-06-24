@@ -1,4 +1,4 @@
-# Differential influence of habitual behavior components on compulsive and problematic reward-seeking behavior
+# Differential influence of habit components on compulsive and problematic reward-seeking behavior
 
 
 # Analysis
