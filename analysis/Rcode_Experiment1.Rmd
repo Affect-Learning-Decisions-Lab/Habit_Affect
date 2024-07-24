@@ -1,6 +1,6 @@
 ---
 title: "Rcode Habit components Experiment 1"
-author: "Lavinia Wuensch, Yoann Stussi, Théo Vernade, Eva R Pool"
+author: "Lavinia Wuensch, Yoann Stussi, Théo Vernede, Eva R Pool"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
@@ -291,6 +291,84 @@ dev.off()
 
 
 ```
+
+```{r plot_cohs_subscales, echo=TRUE, warning=FALSE, message=FALSE}
+# Get subscale item lists
+routine_items <- c(
+  "[15]", "[27]", "[13]", "[6]", "[24]", "[2]", "[12]", "[17]", "[7]", "[10]", 
+  "[20]", "[1]", "[22]", "[18]", "[4]", "[14]"
+  )
+automaticity_items <- c(
+  "[11]", "[25]", "[3]", "[23]", "[19]", "[26]", "[8]", "[9]", "[16]", "[5]",
+  "[21]"
+)
+
+# Get COHS subscales
+df_cohs <- Q1 %>%
+  select(
+    sub,
+    (starts_with("COHS") & ends_with("]"))
+    ) %>%
+  rowwise(sub) %>%
+  # Total
+  mutate(cohs_total = sum(across(starts_with("COHS")), na.rm = TRUE)) %>%
+  # Subscales
+  mutate(cohs_routine = sum(across(ends_with(routine_items)), na.rm = TRUE)) %>%
+  mutate(cohs_automaticity = sum(
+    across(ends_with(automaticity_items)), na.rm = TRUE)
+    ) %>%
+  ungroup()
+
+# now we need to have that in a long format because it's easy for the plots
+df_cohs_plot <- df_cohs %>%
+  select(sub, starts_with("cohs_")) %>%
+    pivot_longer(
+    cols = !sub,
+    names_to = c("scale"),
+    names_pattern = "cohs_(.*)"
+    )
+
+# Labels
+labels <- c(routine = "COHS Routine",
+            automaticity = "COHS Automaticity",
+            total = "COHS Total")
+
+# let's plot distribution
+pp = ggplot(data = df_cohs_plot, aes (x = value, fill = scale)) +
+  facet_wrap(~scale, scales = "free", labeller = labeller(scale = labels)) +
+  geom_histogram(aes(y=..density..),alpha=0.6) +
+  geom_density(aes(color = scale), alpha = 0.3) +
+    scale_fill_viridis_d(name = "Questionnaires", 
+                       begin = .1, end = .9,
+                       option = "inferno",
+                       aesthetics = c("color", "fill"),
+                       labels = labels)+
+  theme_bw()+
+  labs(
+    title = '',
+    x = "Experiment 1",
+    y = "Frequency"
+  )
+
+# let's make the plot nice looking
+ppp <-   pp + theme_bw(base_size = 10, base_family = "Helvetica")+
+  theme(strip.text.x = element_text(size = 10, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(color="white", fill="white", linetype="solid"),
+        axis.ticks.x = element_blank(),
+        axis.text.x  = element_blank(),
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold"),
+        legend.position = "none")
+
+ppp
+
+# let's print the plot in a pdf document
+ggsave(paste0(figures_path, "/Figure_exp1_cohs_subscales.pdf"), ppp, width = 25, height = 12, units = "cm")
+
+```
+
 ## Extract Factors from subscales
 
 ```{r efa_describe, echo=TRUE} 
