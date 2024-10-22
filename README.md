@@ -19,4 +19,4 @@ custom made R functions and setup
 
 ## License
 
-All of the code is licensed under [MIT](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/LICENSE). All of the data is licensed under CC-BY-4.0. 
+All of the code is licensed under [MIT](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/LICENSE). All of the data is licensed under [CC-BY-4.0](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/databases/LICENSE). 
