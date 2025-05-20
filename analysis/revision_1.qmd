@@ -1,29 +1,28 @@
 ---
-title: "Habit components - Revision 1"
-author: "Lavinia Wuensch, Yoann Stussi, Théo Vernede, Eva R Pool"
+title: "Differential influence of habit components on problematic behaviors - Revision 1"
+author: "Lavinia Wuensch, Yoann Stussi, Théo Vernede, Eva R. Pool"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
-  html_document:
+format: 
+  html:
     toc: true
     toc_float:
       collapsed: true
       smooth_scroll: false
+    embed-resources: true
 ---
 
 # Setup
 
-## Environment
-
 ```{r}
 #| label: "setup"
-#| include: FALSE
+#| include: false
 knitr::opts_chunk$set(echo = TRUE)
 
 library(cowplot)
 library(tidyverse)
 library(ggpubr)
 
-# Load libraries necessary for the analysis
+# Load libraries
 library(here)
 library(car)
 library(afex)
@@ -64,7 +63,7 @@ library(knitr)
 here::i_am("analysis/revision_1.qmd")
 data_path <- here::here("databases")
 figures_path <- here::here("figures")
-utilities_path <- here::here("R")
+utilities_path <- here::here("analysis", "functions")
 results_path <- here::here("results")
 
 # Source
@@ -74,109 +73,119 @@ source(str_c(utilities_path, "/cpplus.r"))
 html_theme <- theme_cowplot(font_family = "Helvetica")
 
 # Select color palette
-pal <- viridis::viridis(n = 10) # Color scales designed for colorblindness
-pal2 <- viridis::inferno(n = 10) # Color scales designed for colorblindness
+pal <- viridis::viridis(n = 10)
+pal2 <- viridis::inferno(n = 10)
 ```
-
 
 ```{r}
 #| label: "import_data"
-#| include: FALSE
+#| include: false
 
 experiment_1_factors <- readRDS(str_c(results_path, "/experiment_1_factors.rds"))
 experiment_2_factors <- readRDS(str_c(results_path, "/experiment_2_factors.rds"))
 ```
 
-## Testing specific hypotheses with regression
+# Testing specific hypotheses with regression
 
-### Experiment 1
+Additional hierarchical multiple regressions conducted to address Reviewer 2's comments. This analysis was presented in the rebuttal but is not present in the article.
 
-#### Media
+## Experiment 1
+
+### Media
 
 ```{r}
 #| label: "regression_exp1_media"
-#| include: FALSE
+#| include: true
 
+# Model without habit
 model_exp1_media <- lm(Media ~ Impuls. + Stress + Eat + Comp., data = experiment_1_factors)
 summary(model_exp1_media)
 
-model_exp1_media_automaticity <- lm(Media ~ Impuls. + Stress + Eat + Comp. + Automaticity, data = experiment_1_factors)
-summary(model_exp1_media_automaticity)
-
+# Model with habit
 model_exp1_media_habit <- lm(Media ~ Impuls. + Stress + Eat + Comp. + Automaticity + Routine, data = experiment_1_factors)
 summary(model_exp1_media_habit)
+
+# Model comparison
+anova(model_exp1_media, model_exp1_media_habit)
 ```
 
-
-#### Compulsivity
+### Compulsivity
 
 ```{r}
 #| label: "regression_exp1_compulsivity"
-#| include: FALSE
+#| include: true
 
+# Model without habit
 model_exp1_compulsivity <- lm(Comp. ~ Impuls. + Stress + Eat + Media, data = experiment_1_factors)
 summary(model_exp1_compulsivity)
 
-model_exp1_compulsivity_routine <- lm(Comp. ~ Impuls. + Stress + Eat + Media + Routine, data = experiment_1_factors)
-summary(model_exp1_compulsivity_routine)
-
+# Model with habit
 model_exp1_compulsivity_habit <- lm(Comp. ~ Impuls. + Stress + Eat + Media + Automaticity + Routine, data = experiment_1_factors)
 summary(model_exp1_compulsivity_habit)
+
+# Model comparison
+anova(model_exp1_compulsivity, model_exp1_compulsivity_habit)
 ```
 
-### Experiment 2
+## Experiment 2
 
-#### Media
+### Media
 
 ```{r}
-#| label: "regression_exp1_media"
-#| include: FALSE
+#| label: "regression_exp2_media"
+#| include: true
 
+# Model without habit
 model_exp2_media <- lm(Media ~ Impuls. + Stress + Eat + Comp., data = experiment_2_factors)
 summary(model_exp2_media)
 
-model_exp2_media_automaticity <- lm(Media ~ Impuls. + Stress + Eat + Comp. + Automaticity, data = experiment_2_factors)
-summary(model_exp2_media_automaticity)
-
+# Model with habit
 model_exp2_media_habit <- lm(Media ~ Impuls. + Stress + Eat + Comp. + Automaticity + Routine, data = experiment_2_factors)
 summary(model_exp2_media_habit)
+
+# Model comparison
+anova(model_exp2_media, model_exp2_media_habit)
 ```
 
-
-#### Compulsivity
+### Compulsivity
 
 ```{r}
-#| label: "regression_exp1_compulsivity"
-#| include: FALSE
+#| label: "regression_exp2_compulsivity"
+#| include: true
 
+# Model without habit
 model_exp2_compulsivity <- lm(Comp. ~ Impuls. + Stress + Eat + Media, data = experiment_2_factors)
 summary(model_exp2_compulsivity)
 
-model_exp2_compulsivity_routine <- lm(Comp. ~ Impuls. + Stress + Eat + Media + Routine, data = experiment_2_factors)
-summary(model_exp2_compulsivity_routine)
-
+# Model with habit
 model_exp2_compulsivity_habit <- lm(Comp. ~ Impuls. + Stress + Eat + Media + Automaticity + Routine, data = experiment_2_factors)
 summary(model_exp2_compulsivity_habit)
+
+# Model comparison
+anova(model_exp2_compulsivity, model_exp2_compulsivity_habit)
 ```
 
-## Replication Experiment 1 to Experiment 2
+# Replication of Experiment 1 to Experiment 2
+
+Additional analysis conducted with subset of questionnaires used in both Experiments 1 and 2 to address Reviewer 2's comments. This analysis can be found in the supporting information.
 
 ```{r}
 #| label: "import_data_replication"
-#| include: FALSE
+#| include: false
 
-# experiment_1_items <- readRDS(str_c(results_path, "/experiment_1_items.rds"))
+experiment_1_items <- readRDS(str_c(results_path, "/experiment_1_items.rds"))
 experiment_2_items <- readRDS(str_c(results_path, "/experiment_2_items.rds"))
 ```
 
-### Experiment 1
+## Experiment 1
 
-Since the PMPUQ is not present in Experiment 2, the first step is to get the 
-factor structure of the network without the PMPUQ for Experiment 1.
+Since the PMPUQ is not present in Experiment 2, the first step is to get the factor structure of the network without the PMPUQ for Experiment 1.
 
-#### Extract Factors from subscales
+### Extract factors from subscales
 
-```{r efa_describe, echo=TRUE} 
+```{r} 
+#| label: "efa_describe_1"
+#| include: true
 
 # Select subscales
 var.subscales <- c("CESD_depressed",
@@ -204,18 +213,19 @@ var.subscales <- c("CESD_depressed",
 db.efa.exp1 <- experiment_1_items[var.subscales]
 db.efa.descr1 = psych::describe(db.efa.exp1)
 
-
 table_exp1_efa_descr <- knitr::kable(db.efa.descr1 , "html", caption = "Descriptive values for subscales used in Experiment 1") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position", position = "center", full_width = F) %>%
   row_spec(0,bold=T,align='c')
 
 table_exp1_efa_descr 
 ```
-Verify postulates with KMO and Barlett test
+Verify postulates with KMO and Barlett test:
 
-```{r efa_postulates, echo=TRUE} 
+```{r} 
+#| label: "efa_postulates_1"
+#| include: true
 
-# verify postulates
+# Verify postulates
 KMO(db.efa.exp1)
 
 cor_matrix <- cor(db.efa.exp1, use = "complete.obs")
@@ -223,61 +233,69 @@ cor_matrix <- cor(db.efa.exp1, use = "complete.obs")
 cortest.bartlett(cor_matrix, n = nrow(db.efa.exp1))
 ```
 
-The first method we use  the parallel analysis
+First, use parallel analysis method:
 
-```{r efa_fa.parallel, echo=TRUE} 
+```{r} 
+#| label: "efa_fa.parallel_1"
+#| include: true
 
 nFact  <- fa.parallel(db.efa.exp1, fm = "ml")
-
 ```
 
- Second method is VSS
+Second, use VSS method:
 
-```{r efa_vss, echo=TRUE} 
+```{r} 
+#| label: "efa_vss_1"
+#| include: true
 
 nFact  <- vss(db.efa.exp1) 
-
 ```
-nScree method
+Third, nScree method:
 
-```{r efa_nscreen, echo=TRUE} 
+```{r} 
+#| label: "efa_nscreen_1"
+#| include: true
 
 nFact  <- nScree(x = na.omit(db.efa.exp1), model = "factors") 
 
 plotnScree(nFact) 
 ```
 
-Try method "compraisons data"
+Try method "comparisons data":
 
-```{r efa_compdata, echo=TRUE} 
-
+```{r} 
+#| label: "efa_compdata_1"
+#| include: true
+ 
 nFact <- EFACompData(na.omit(db.efa.exp1), 8, n.pop = 10000, n.samples = 500, alpha = .30, graph = T,
-                     corr.type = "pearson") #
-
+                     corr.type = "pearson")
 ```
-##### Apply EFA with 4 factors and an oblimin rotation
 
-```{r efa_fa, echo=TRUE} 
+#### Apply EFA with 4 factors and an oblimin rotation
+
+```{r} 
+#| label: "efa_fa_1"
+#| include: true
 
 quest.1.efa1 <- fa(r = db.efa.exp1, nfactors =4, rotate = "oblimin", fm = "ml")
 
-print(quest.1.efa1$loadings,cutoff = 0.2)
+print(quest.1.efa1$loadings, cutoff = 0.2)
 ```
 
-##### Compute factor scores 
+#### Compute factor scores 
 
- We compute factor scores but importantly we assess factor indeterminacy to control if the factor can be used as predictors 
+We compute factor scores but importantly we assess factor indeterminacy to control if the factors can be used as predictors.
 
-```{r efa_loading, echo=TRUE} 
+```{r} 
+#| label: "efa_loading_1"
+#| include: true
 
 s.exp1 = factor.scores (db.efa.exp1, quest.1.efa1) #
 s.exp1$R2
-
 ```
-##### Plot correlation matrix between factors
+#### Plot correlation matrix between factors
 
-```{r plot_correlation_matrix, echo=FALSE, warning=TRUE} 
-
+```{r plot_correlation_matrix_1, echo=FALSE, warning=TRUE} 
 fact_col_new  <- c( "CESD: depr.",
                    "CESD: pos.",
                    "CESD: somatic",
@@ -299,47 +317,41 @@ fact_col_new  <- c( "CESD: depr.",
                    "OCI: neutr.",
                    "PSS")
 
-
-
 col_old = var.subscales
 
 colnames(db.efa.exp1)[colnames(db.efa.exp1) == var.subscales] <- fact_col_new
 corrmatrix <- cor(db.efa.exp1, use="complete.obs")
 col1 <- colorRampPalette(brewer.pal(9,"BrBG"))
 corrplot(corrmatrix,method = "square", tl.col = "black", tl.cex = 0.75, sig.level = 0.05, insig = "pch", pch.cex = 1, col = col1(100))
-dev.print(pdf, file.path(figures_path,'Figure_Exp1_CorrelationalSyptomes_revision.pdf'))
-dev.off()
+# dev.print(pdf, file.path(figures_path,'Figure_Exp1_CorrelationalSyptomes_revision.pdf'))
+# dev.off()
 ```
-##### Extract transdiagnostic Factors based on the EFA
+#### Extract transdiagnostic factors based on the EFA
+```{r}
+#| label: "plot_factor_loadings_1"
+#| include: true
+#| message: false
+#| warning: false
 
-
-```{r plot_factor_loadings, echo=TRUE, message=FALSE, warning=FALSE}
-
-
-# get loadings into a dataset
+# Get loadings into a dataset
 load = quest.1.efa1$loadings
 load = load[]
 load = data.frame(load)
 setDT(load,keep.rownames=TRUE)[]
 colnames(load)[1] <- "Subscale"
 
-
 loadings.m <- melt(load, id="Subscale",
                    measure=c("ML3", "ML1","ML2", "ML4"),
                    variable.name="Factor", value.name="Loading")
 
 
-# name factors
-labels <- c(ML3 = "Pr. media", ML1 = "Stress",
-            ML2 = "Pr. eating", ML4 = "Compulsivity")
-
+# Name factors
+labels <- c(ML3 = "Media", ML1 = "Stress",
+            ML2 = "Eat", ML4 = "Comp.")
 
 loadings.m$subscales = fact_col_new
 
-
 loadings.m$subscales <- factor(loadings.m$subscales, levels = loadings.m$subscales[seq (1:20)])
-
-
 
 pp <- ggplot(loadings.m, aes(subscales, abs(Loading), fill=Loading)) +
   facet_wrap(~ Factor, nrow=1, labeller = labeller(Factor = labels) ) +
@@ -352,39 +364,42 @@ pp <- ggplot(loadings.m, aes(subscales, abs(Loading), fill=Loading)) +
   ylab("Loading Strength") +
   theme_bw(base_size=10)
 
-# let's make the plot nice looking
+# Make plot nicer
 ppp <-   pp + theme_bw(base_size = 10, base_family = "Helvetica")+
-  theme(strip.text.x = element_text(size = 8, face = "bold"),
+  theme(strip.text.x = element_text(size = 15, face = "bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.background = element_rect(color="white", fill="white", linetype="solid"),
-        axis.title.x = element_text(size = 15, face = "bold"),
-        axis.title.y = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 12),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
         legend.position = "none")
 
 ppp
 
-dev.print(pdf, file.path(figures_path,'Figure_Exp1_Factors_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_1_factors_replication.pdf"))
 dev.off()
-
-
 ```
 
-##### Factors correlations
+#### Factors correlations
 
-```{r factor_correlation, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| label: "factor_correlation_1"
+#| include: true
+#| message: false
+#| warning: false
 
 var.net = c("COHS_automaticity", "COHS_routine","UPPS_total" )
 db.network.tmp1 <- experiment_1_items[var.net]
 
-# merge with the FULL database
+# Merge with full database
 axes.exp1 <- s.exp1$scores
 
-# combine
+# Combine
 db.network.exp1 <- cbind(db.network.tmp1, axes.exp1)
 
-# rename with interpreted factors
-old_names = c ("COHS_automaticity", "COHS_routine", "UPPS_total",
+# Rename with interpreted factors
+old_names = c("COHS_automaticity", "COHS_routine", "UPPS_total",
                "ML1","ML3","ML2","ML4")
 
 new_names <- c("Automaticity","Routine","Impuls.",
@@ -394,38 +409,45 @@ colors <- c(pal[8], pal[8],pal[8],
             pal[9], pal[9], pal[9],
             pal[9])
 
-
 colnames(db.network.exp1)[colnames(db.network.exp1) == old_names] <- new_names
 
-# descriptive correlation
-factor_corr_plot <- cpplus(db.network.exp1, reorder=FALSE, alpha=0.05)
+# Descriptive correlation
+factor_corr_plot <- cpplus(
+  db.network.exp1,
+  reorder=FALSE,
+  alpha=0.05
+  )
 
-dev.print(pdf, file.path(figures_path,'Figure_Exp1_Factors_correlation_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_1_factors_correlation_replication.pdf"))
 dev.off()
 ```
 
-#### Network Dynamic Analysis
- 
- 
-Centrality table 
-```{r network_centrality, echo=TRUE}
+### Dynamic network analysis
 
-mynetwork.exp1 <- estimateNetwork(db.network.exp1, default ="EBICglasso") #  EBIC hyperparameter is set to 0.5
+Centrality table:
+
+```{r}
+#| label: "network_centrality_1"
+#| include: true
+
+mynetwork.exp1 <- estimateNetwork(db.network.exp1, default ="EBICglasso") # EBIC hyperparameter is set to 0.5
 
 CentralityTable <- centralityTable(mynetwork.exp1)
 
-
 EITable <- subset(CentralityTable, measure == "ExpectedInfluence")
 
-table_exp1_ei <- knitr::kable(EITable , "html", caption = "Centrality Table Experiment 2") %>%
+table_exp1_ei <- knitr::kable(EITable , "html", caption = "Centrality Table Experiment 1") %>%
  kableExtra::kable_styling(latex_options = "HOLD_position", position = "center", full_width = F) %>%
   row_spec(0,bold=T,align='c')
 
 table_exp1_ei
- 
 ```
 
-```{r network_analysis, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| label: "network_analysis_1"
+#| include: true
+#| message: false
+#| warning: false
 
 nledges <- getWmat(mynetwork.exp1)
 
@@ -445,20 +467,20 @@ plot_network.exp1 <- qgraph(nledges,
        label.font = 2
        )
 
-
-dev.print(pdf, file.path(figures_path,'Figure_Exp1_Network_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_1_network_revision.pdf"))
 print(plot_network.exp1)
 dev.off()
-
 ```
 
-##### Estimate network edge weights accuracy and centrality measures stability
+#### Estimate network edge weights accuracy and centrality measures stability
 
+First for edges:
 
-First for the edges that are what matters the most for our hypothesis
-
-```{r network_stability_edges, echo=TRUE, warning=FALSE, message= FALSE}
-
+```{r}
+#| label: "network_stability_edges_1"
+#| include: true
+#| message: false
+#| warning: false
 
 set.seed(1331)
 b1 <- bootnet(mynetwork.exp1,  nBoots= 10000, nCores = 1,
@@ -473,32 +495,34 @@ table_exp1_boot <- knitr::kable(tb.b1 , "html", caption = "Table Experiment 1") 
 table_exp1_boot
 
 plot (b1, plot = "interval", split0 = TRUE, order="sample", labels=T)
-
 ```
 
-and now for the centrality indexes 
+And for centrality indices:
 
-
-```{r network_stability, echo=TRUE, warning=FALSE, message=FALSE}
-
+```{r}
+#| label: "network_stability_1"
+#| include: true
+#| message: false
+#| warning: false
 
 set.seed(1331)
 b2 <- bootnet(mynetwork.exp1,nBoots= 10000, nCores = 1, type = "case",
               statistics = c("strength","expectedInfluence","edge"),caseN = 50)
 
-
 corStability(b2)
 
-plot (b2, c("expectedInfluence"))# centrality stability graph
-
+plot (b2, c("expectedInfluence")) # Centrality stability graph
 ```
- 
 
-### Experiment 2
+## Experiment 2
 
-#### Extract Factors from subscales
+### Extract factors from subscales
 
-```{r efa_describe, echo=TRUE, message= FALSE, warning= FALSE}
+```{r}
+#| label: "efa_describe_2"
+#| include: true
+#| message: false
+#| warning: false
 
 # Select subscales
 var.subscales <- c("CESD_depressed",
@@ -527,7 +551,6 @@ db.efa.exp2 <- experiment_2_items[var.subscales]
 
 db.efa.descr2 = psych::describe(db.efa.exp2)
 
-
 table_exp2_efa_descr <- knitr::kable(db.efa.descr2 , "html", caption = "Descriptive values for subscales used in Experiment 2") %>%
   kableExtra::kable_styling(latex_options = "HOLD_position", position = "center", full_width = F) %>%
   row_spec(0,bold=T,align='c')
@@ -535,9 +558,13 @@ table_exp2_efa_descr <- knitr::kable(db.efa.descr2 , "html", caption = "Descript
 table_exp2_efa_descr 
 ```
 
-Verify postulates with KMO and Bartlett test
+Verify postulates with KMO and Bartlett test:
 
-```{r efa_postulates, echo=TRUE, message= FALSE, warning= FALSE}
+```{r}
+#| label: "efa_postulates_2"
+#| include: true
+#| message: false
+#| warning: false
 
 KMO (db.efa.exp2)
 
@@ -545,59 +572,86 @@ cor_matrix <- cor(db.efa.exp2, use = "complete.obs")
 
 cortest.bartlett(cor_matrix, n = nrow(db.efa.exp2))
 ```
-The first method we use is the parallel analysis
 
-```{r efa_fa.parallel, echo=TRUE, message= FALSE, warning= FALSE} 
+First, use parallel analysis method:
+
+```{r} 
+#| label: "efa_fa.parallel_2"
+#| include: true
+#| message: false
+#| warning: false
 
 nFact  <- fa.parallel(db.efa.exp2, fm = "ml") 
 ```
- Second method is VSS 
+
+Second, use VSS method:
  
-```{r efa_vss, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "efa_vss_2"
+#| include: true
+#| message: false
+#| warning: false
+
 nFact <- vss(db.efa.exp2)
- 
 ```
 
+Third, nScree method:
 
-nScree method
+```{r} 
+#| label: "efa_nscreen_2"
+#| include: true
+#| message: false
+#| warning: false
 
-```{r efa_nscreen, echo=TRUE, message= FALSE, warning= FALSE} 
 nFact  <- nScree(x = na.omit(db.efa.exp2), model = "factors") 
 plotnScree(nFact) 
 ```
 
-Try method "comparison data"
+Try method "comparisons data":
 
-```{r efa_compdata, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "efa_compdata_2"
+#| include: true
+#| message: false
+#| warning: false
+
 nFact <- EFACompData(na.omit(db.efa.exp2), 10, n.pop = 10000, n.samples = 500, alpha = .30, graph = T,corr.type = "pearson") 
 ```
 
-##### Apply EFA with oblimin rotation
+#### Apply EFA with oblimin rotation
 
-```{r efa_fa, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "efa_fa_2"
+#| include: true
+#| message: false
+#| warning: false
 
 quest.sc.efa2 <- fa(r = db.efa.exp2, nfactors =4, rotate = "oblimin", fm = "ml") 
 print(quest.sc.efa2$loadings,cutoff = 0.2)
-
 ```
 
-##### Compute factor scores 
+#### Compute factor scores 
 
- We compute factor scores but importantly we assess factor indeterminacy to control if the factor can be used as predictors 
+We compute factor scores but importantly we assess factor indeterminacy to control if the factors can be used as predictors.
 
-
-```{r efa_loading, echo=TRUE} 
+```{r} 
+#| label: "efa_loading_2"
+#| include: true
+#| message: false
+#| warning: false
 
 s.exp2 = factor.scores (db.efa.exp2, quest.sc.efa2) 
 s.exp2$R2
-
 ```
  
-##### Plot correlation matrix of all subscales
+#### Plot correlation matrix of all subscales
  
- 
-```{r plot_correlation_matrix, echo=FALSE,warning=FALSE, message=FALSE}
- 
+```{r}
+#| label: "plot_correlation_matrix_2"
+#| include: true
+#| message: false
+#| warning: false
+
 fact_col_new  <- c( "CESD: depr.",
                    "CESD: pos.",
                    "CESD: somatic",
@@ -619,48 +673,42 @@ fact_col_new  <- c( "CESD: depr.",
                    "OCI: neutr.",
                    "PSS")
 
-
-
 col_old = var.subscales
 
 colnames(db.efa.exp2)[colnames(db.efa.exp2) == var.subscales] <- fact_col_new
 corrmatrix <- cor(db.efa.exp2, use="complete.obs")
 col1 <- colorRampPalette(brewer.pal(9,"BrBG"))
 corrplot(corrmatrix,method = "square", tl.col = "black", tl.cex = 0.5, sig.level = 0.05, insig = "pch", pch.cex = 1, col = col1(100))
-dev.print(pdf, file.path(figures_path,'Figure_Exp2_correlation_matrix_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_2_correlation_matrix_replication.pdf"))
 dev.off()
- 
 ```
  
-##### Extract transdiagnostic Factors based on the EFA
+#### Extract transdiagnostic factors based on the EFA
  
- 
-```{r plot_factor_loadings, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "plot_factor_loadings_2"
+#| include: true
+#| message: false
+#| warning: false
 
-# get loadings into a dataset
+# Get loadings into a dataset
 load = quest.sc.efa2$loadings
 load = load[]
 load = data.frame(load)
 setDT(load,keep.rownames=TRUE)[]
 colnames(load)[1] <- "Subscale"
 
-
 loadings.m <- melt(load, id="Subscale",
                    measure=c("ML3", "ML2","ML1", "ML4"),
                    variable.name="Factor", value.name="Loading")
 
-
-# name factors
-labels <- c(ML3 = "Pr. media", ML1 = "Pr. eating",
-            ML2 = "Stress", ML4 = "Compulsivity")
-
+# Name factors
+labels <- c(ML3 = "Media", ML1 = "Eat",
+            ML2 = "Stress", ML4 = "Comp.")
 
 loadings.m$subscales = fact_col_new
 
-
 loadings.m$subscales <- factor(loadings.m$subscales, levels = loadings.m$subscales[seq (1:20)])
-
-
 
 pp <- ggplot(loadings.m, aes(subscales, abs(Loading), fill=Loading)) +
   facet_wrap(~ Factor, nrow=1, labeller = labeller(Factor = labels) ) +
@@ -673,37 +721,41 @@ pp <- ggplot(loadings.m, aes(subscales, abs(Loading), fill=Loading)) +
   ylab("Loading Strength") +
   theme_bw(base_size=10)
 
-# let's make the plot nice looking
+# Make plot nicer
 ppp <-   pp + theme_bw(base_size = 10, base_family = "Helvetica")+
-  theme(strip.text.x = element_text(size = 8, face = "bold"),
+  theme(strip.text.x = element_text(size = 15, face = "bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.background = element_rect(color="white", fill="white", linetype="solid"),
-        axis.title.x = element_text(size = 15, face = "bold"),
-        axis.title.y = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 12),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
         legend.position = "none")
 
 ppp
 
-dev.print(pdf, file.path(figures_path,'Figure_Exp2_Factors_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_2_factors_replication.pdf"))
 dev.off()
 ```
  
-##### Factors correlations
+#### Factors correlations
 
-```{r factor_correlation, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "factor_correlation_2"
+#| include: true
+#| message: false
+#| warning: false
 
 var.net = c("COHS_automaticity", "COHS_routine", "UPPS_total" )
 db.network.tmp2 <- experiment_2_items[var.net]
 
-# merge with the FULL database
+# Merge with full database
 axes.exp2 <- s.exp2$scores
 
-# combine
+# Combine
 db.network.exp2 <- cbind(db.network.tmp2, axes.exp2)
 
-
-# rename with interpreted factors
+# Rename with interpreted factors
 old_names = c("COHS_automaticity", "COHS_routine","UPPS_total",
                "ML2", "ML3","ML4", "ML1")
 
@@ -714,27 +766,29 @@ colors <- c(pal[8], pal[8],pal[8],
             pal[9], pal[9], pal[9],
             pal[9])
 
-
-
 colnames(db.network.exp2)[colnames(db.network.exp2) == old_names] <- new_names
 
-# descriptive correlation
+# Descriptive correlation
 factor_corr_plot <- cpplus(db.network.exp2, reorder=FALSE, alpha=0.05)
 
-dev.print(pdf, file.path(figures_path,'Figure_Exp2_Factors_correlation_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_2_factors_correlation_replication.pdf"))
 dev.off()
 ```
  
-#### Network Dynamic Analysis
+### Dynamic network analysis
 
+Centrality table:
 
-Centrality Table
-```{r network_centrality, echo=TRUE, message= FALSE, warning= FALSE} 
-# estimate network
-mynetwork.exp2 <- estimateNetwork(db.network.exp2, default ="EBICglasso") # lasso with ebic hyperparameter is 0.5
+```{r} 
+#| label: "network_centrality_2"
+#| include: true
+#| message: false
+#| warning: false
+
+# Estimate network
+mynetwork.exp2 <- estimateNetwork(db.network.exp2, default ="EBICglasso") # Lasso with ebic hyperparameter is 0.5
 
 CentralityTable <- centralityTable(mynetwork.exp2)
-
 
 EITable <- subset(CentralityTable, measure == "ExpectedInfluence")
 
@@ -743,11 +797,14 @@ table_exp2_ei <- knitr::kable(EITable , "html", caption = "Centrality Table Expe
   row_spec(0,bold=T,align='c')
 
 table_exp2_ei
-
 ```
 
-```{r network_plot, echo=TRUE, message= FALSE, warning= FALSE} 
- 
+```{r} 
+#| label: "network_plot_2"
+#| include: true
+#| message: false
+#| warning: false
+
 nledges <- getWmat(mynetwork.exp2)
 
 plot_network.exp2 <- qgraph(nledges,
@@ -767,26 +824,25 @@ plot_network.exp2 <- qgraph(nledges,
        label.font = 2
        )
 
-
-dev.print(pdf, file.path(figures_path,'Figure_Exp2_Network_revision.pdf'))
+dev.print(pdf, file.path(figures_path, "experiment_2_network_replication.pdf"))
 print(plot_network.exp2)
 dev.off()
- 
 ```
 
+#### Estimate the network stability
 
-##### Estimate the network stability
+First for edges:
 
+```{r} 
+#| label: "network_stability_edges_2"
+#| include: true
+#| message: false
+#| warning: false
 
-First for the edges that are what matters the most for our hypothesis
-
-```{r network_stability_edges, echo=TRUE, message= FALSE, warning= FALSE} 
-
-# set seed to obtain reproduceble results
+# Set seed to obtain reproducible results
 set.seed(1331)
 b1 <- bootnet(mynetwork.exp2, nBoots= 10000, nCores = 1,
               statistics = c("strength","expectedInfluence","edge"),caseN = 50)
-
 
 tb.b1 = summary(b1)
 
@@ -797,14 +853,15 @@ table_exp2_boot <- knitr::kable(tb.b1 , "html", caption = "Table Experiment 2") 
 table_exp2_boot
 
 plot (b1, plot = "interval", split0 = TRUE, order="sample", labels=T)
-
-
 ```
 
+And for centrality indices:
 
-and now for the centrality indexes 
-
-```{r network_stability_centrality, echo=TRUE, message= FALSE, warning= FALSE} 
+```{r} 
+#| label: "network_stability_centrality_2"
+#| include: true
+#| message: false
+#| warning: false
 
 set.seed(1331)
 b2 <- bootnet(mynetwork.exp2, nBoots= 10000, nCores = 1, type = "case",
@@ -812,26 +869,24 @@ b2 <- bootnet(mynetwork.exp2, nBoots= 10000, nCores = 1, type = "case",
 
 corStability(b2)
 
-plot (b2, c("expectedInfluence"))# centrality stability graph
-
-
+plot (b2, c("expectedInfluence")) # Centrality stability graph
 ```
  
-## Adding cutoff values to questionnaire distributions
+# Adding cutoff values to questionnaire distributions
 
 ```{r}
-#| label: "import_data_replication"
-#| include: FALSE
+#| label: "import_data_cutoffs"
+#| include: false
 
 experiment_1_questionnaires <- readRDS(str_c(results_path, "/experiment_1_questionnaires.rds"))
 experiment_2_questionnaires <- readRDS(str_c(results_path, "/experiment_2_questionnaires.rds"))
 ```
 
-### Experiment 1
+## Experiment 1
 
 ```{r}
 #| label: "plot_distribution_experiment_1"
-#| echo: TRUE
+#| echo: true
 
 # Labels
 labels <- c(CESD_total = "CES-D", 
@@ -895,7 +950,6 @@ cutoff_values <- tribble(
   # No cutoff score exists
 )
 
-
 # Plot questionnaire distributions
 pp <- ggplot(data = experiment_1_questionnaires, aes (x = score, fill = questionnaire)) +
   facet_wrap(
@@ -922,8 +976,6 @@ pp <- ggplot(data = experiment_1_questionnaires, aes (x = score, fill = question
     y = "Frequency"
   )
 
-pp
-
 # Plot formatting
 ppp_1 <- pp +
   theme_bw(base_size = 10, base_family = "Helvetica") +
@@ -941,183 +993,15 @@ ppp_1 <- pp +
     )
 
 ppp_1
-
-# # Export the plot to pdf
-# pdf(file.path(figures_path,'Figure_exp1_Questionnaires_distribution.pdf'))
-# print(ppp_1)
-# dev.off()
 ```
 
-### Experiment 2
+## Experiment 2
 
-```{r}
-#| label: "plot_distribution_experiment_2"
-#| echo: TRUE
-
-# Labels
-labels <- c(EAT26_total = "EAT", 
-            COHS_total = "COHS",
-            PSS_total = "PSS",
-            IAT_total = "IAT", 
-            PCLS_total = "PCLS", 
-            OCIR_total = "OCI", 
-            STICSAT_total = "STICSA-T",
-            UPPS_total = "UPPS",
-            SASSV_total ="SASSV" ,
-            GAS_total = "GAS",
-            EDSR_total = "EDS-R",
-            LSAS_total = "LSAS",
-            YFAS_score = "YFAS",
-            QABB_total = "QABB",
-            CESD_total = "CES-D")
-
-cutoff_values <- tribble(
-  ~questionnaire, ~cutoff,
-  # CES-D
-  # Morin, A. J. S., Moullec, G., Maïano, C., Layet, L., Just, J.-L., & Ninot, 
-  # G. (2011). Psychometric properties of the Center for Epidemiologic Studies 
-  # Depression Scale (CES-D) in French clinical and nonclinical adults. Revue 
-  # d’Épidémiologie et de Santé Publique, 59(5), 327–340.
-  # https://doi.org/10.1016/j.respe.2011.03.061
-  "CESD_total",   19,
-
-  # EAT
-  # Leichner, P., Steiger, H., & Gottheil, N. (1994). Validation d’une échelle
-  # d’attitudes alimentaires auprès d’une population québécoise francophone. 
-  # 39(1).
-  "EAT26_total",  20,
-  
-  # IAT
-  # Khazaal, Y., Billieux, J., Thorens, G., Khan, R., Louati, Y., Scarlatti,
-  # E., Theintz, F., Lederrey, J., Van Der Linden, M., & Zullino, D. (2008). 
-  # French Validation of the Internet Addiction Test. CyberPsychology & 
-  # Behavior, 11(6), 703–706. https://doi.org/10.1089/cpb.2007.0249
-  "IAT_total",    50,
-  
-  # OCI-R
-  # Abramowitz, J. S., & Deacon, B. J. (2006). Psychometric properties and 
-  # construct validity of the Obsessive–Compulsive Inventory—Revised: 
-  # Replication and extension with a clinical sample. Journal of Anxiety 
-  # Disorders, 20(8), 1016–1035. https://doi.org/10.1016/j.janxdis.2006.03.001
-  "OCIR_total",   14,
-  
-  # PMPUQ
-  # No cutoff score exists
-  # Harris, B., Regan, T., Schueler, J., & Fields, S. A. (2020). Problematic 
-  # Mobile Phone and Smartphone Use Scales: A Systematic Review. Frontiers in 
-  # Psychology, 11. https://doi.org/10.3389/fpsyg.2020.00672
-  
-  # PSS
-  # No cutoff score exists
-  # We could use the normative data from the French PSS-10
-  
-  # UPPS
-  # No cutoff score exists
-  
-  # EDS-R
-  # No cutoff score, but calculation to determine if at-risk of dependence
-  
-  # GAS
-  # No cutoff score, but calculation to determine if at-risk of dependence
-
-  # LSAS
-  # Caballo, V. E., Salazar, I. C., Arias, V., Hofmann, S. G., & Curtiss, J. 
-  # (2018). Psychometric properties of the Liebowitz Social Anxiety Scale in a 
-  # large cross-cultural Spanish and Portuguese speaking sample. Brazilian 
-  # Journal of Psychiatry, 41, 122–130. 
-  # https://doi.org/10.1590/1516-4446-2018-0006
-  "LSAS_total", 60,
-  
-  # PCLS
-  # Blanchard, E. B., Jones-Alexander, J., Buckley, T. C., & Forneris, 
-  # C. A. (1996). Psychometric properties of the PTSD checklist (PCL). Behaviour
-  # Research and Therapy, 34(8), 669–673.
-  # https://doi.org/10.1016/0005-7967(96)00033-2
-  "PCLS_total", 44,
-  
-  # QABB
-  # Lejoyeux, M., Mathieu, K., Embouazza, H., Huet, F., & Lequen, V. (2007). 
-  # Prevalence of compulsive buying among customers of a Parisian general store.
-  # Comprehensive Psychiatry, 48(1), 42–46. 
-  # https://doi.org/10.1016/j.comppsych.2006.05.005
-  "QABB_total", 10,
-  
-  # SASSV
-  # Lopez-Fernandez, O. (2017). Short version of the Smartphone Addiction Scale 
-  # adapted to Spanish and French: Towards a cross-cultural research in 
-  # problematic mobile phone use. Addictive Behaviors, 64, 275–280. 
-  # https://doi.org/10.1016/j.addbeh.2015.11.013
-  "SASSV_total", 32,
-  
-  # STICSA-T
-  # Van Dam, N. T., Gros, D. F., Earleywine, M., & Antony, M. M. (2013). 
-  # Establishing a trait anxiety threshold that signals likelihood of anxiety 
-  # disorders. Anxiety, Stress, & Coping, 26(1), 70–86. 
-  # https://doi.org/10.1080/10615806.2011.631525
-  "STICSAT_total", 43
-  
-  # YFAS
-  # No cutoff scores exist
-  
-
-)
-
-
-# Plot questionnaire distributions
-pp <- ggplot(data = experiment_2_questionnaires, aes (x = score, fill = questionnaire)) +
-  facet_wrap(
-    ~ questionnaire,
-    scales = "free",
-    labeller = labeller(questionnaire = labels)
-    ) +
-  geom_histogram(aes(y=..density..), alpha=0.6) +
-  geom_density(aes(color = questionnaire), alpha = 0.3) +
-  geom_vline(
-    data = cutoff_values, 
-    mapping = aes(xintercept = cutoff),
-    linetype = "dashed") +
-  scale_fill_viridis_d(
-    name = "Questionnaires", 
-    begin = .1, end = .9,
-    option = "inferno",
-    aesthetics = c("color", "fill"),
-    labels = labels) +
-  theme_bw() +
-  labs(
-    title = "",
-    x = "Experiment 2 questionnaires",
-    y = ""
-  )
-
-pp
-
-# Plot formatting
-ppp_2 <- pp + 
-  theme_bw(base_size = 10, base_family = "Helvetica") +
-  theme(
-    strip.text.x = element_text(size = 10),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    strip.background = element_rect(color = "white", fill = "white", linetype = "solid"),
-    axis.ticks.x = element_blank(),
-    axis.text.x  = element_blank(),
-    axis.title.x = element_text(size = 13),
-    axis.title.y = element_text(size = 13),
-    legend.position = "none"
-    )
-
-ppp_2
-
-# # Export the plot to pdf
-# pdf(str_c(figures_path, "/Figure_exp1_Questionnaires_distribution_revision.pdf"))
-# print(ppp_2)
-# dev.off()
-
-```
+### Manual coding
 
 ```{r}
 #| label: "gas_cutoff"
-#| echo: TRUE
+#| echo: true
 
 # Khazaal, Y., Chatton, A., Rothen, S., Achab, S., Thorens, G., Zullino, D.,
 # & Gmel, G. (2016). Psychometric properties of the 7-item game addiction scale 
@@ -1186,23 +1070,290 @@ gas <- experiment_2_items %>%
 
 # Get number of excessive gamers
 n_excessive <- gas$excessive %>%
-  count() %>%
+  plyr::count() %>%
   filter(x == 1) %>%
   select(freq)
   
-
 # Calculate cutoff that will result in the correct proportion of individuals
 # being classified on the plot
-cutoff <- sort(gas$GAS_total) %>%
+cutoff_gas <- sort(gas$GAS_total) %>%
   nth(., (nrow(gas) - as.integer(n_excessive)))
 ```
 
-### Create joint figure
+```{r}
+#| label: "eds_cutoff"
+#| echo: true
+
+# Hausenblas, H. A., & Downs, D. S. (2002). How Much is Too Much? The 
+# Development and Validation of the Exercise Dependence Scale. Psychology & 
+# Health, 17(4), 387–404. https://doi.org/10.1080/0887044022000004894
+
+# Individuals who indicate strong endorsement (i.e., 5 or 6 on the Likert scale)
+# on at least three of the seven criteria are classified as at-risk.
+
+eds <- experiment_2_items %>%
+  select(starts_with("EDSR_")) %>%
+  mutate(
+    tolerance = case_when(
+      EDSR_tolerance >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    withdrawal = case_when(
+      EDSR_withdrawal >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    lack_control = case_when(
+      EDSR_lack_control >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    time = case_when(
+      EDSR_time >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    reduction_activities = case_when(
+      EDSR_reduction_activities >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%  
+  mutate(
+    intention = case_when(
+      EDSR_intention >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    continuance = case_when(
+      EDSR_continuance >= 15 ~ 1,
+      .default = 0
+    )
+  ) %>%
+  mutate(
+    at_risk_total = tolerance + withdrawal + lack_control + time + reduction_activities + intention + continuance
+  ) %>%
+  mutate(
+    at_risk = case_when(
+      at_risk_total >= 3 ~ 1,
+      .default = 0
+    )
+  )
+
+# Get number of individuals at risk for exercise dependence
+n_at_risk <- eds$at_risk %>%
+  plyr::count() %>%
+  filter(x == 1) %>%
+  select(freq)
+  
+# Calculate cutoff that will result in the correct proportion of individuals
+# being classified on the plot
+cutoff_eds <- sort(eds$EDSR_total) %>%
+  nth(., (nrow(eds) - as.integer(n_at_risk)))
+```
+
+```{r}
+#| label: "myfas_cutoff"
+#| echo: true
+
+# Brunault, P., Berthoz, S., Gearhardt, A. N., Gierski, F., Kaladjian, A., 
+# Bertin, E., Tchernof, A., Biertho, L., De Luca, A., Hankard, R., Courtois, 
+# R., Ballon, N., Benzerouk, F., & Bégin, C. (2020). The Modified Yale Food 
+# Addiction Scale 2.0: Validation Among Non-Clinical and Clinical 
+# French-Speaking Samples and Comparison With the Full Yale Food Addiction 
+# Scale 2.0. Frontiers in Psychiatry, 11, 480671. 
+# https://doi.org/10.3389/fpsyt.2020.480671
+# https://sites.lsa.umich.edu/fastlab/yale-food-addiction-scale/
+
+# Mild Food Addiction = 2 or 3 symptoms and clinical significance
+yfas <- experiment_2_items %>%
+  select(starts_with("YFAS")) %>%
+  mutate(
+    addiction = case_when(
+      YFAS_score >= 2 & YFAS_clinical_sign == 1 ~ 1,
+      .default = 0
+    )
+  )
+
+# Get number of excessive gamers
+n_addiction <- yfas$addiction %>%
+  plyr::count() %>%
+  filter(x == 1) %>%
+  select(freq)
+  
+# Calculate cutoff that will result in the correct proportion of individuals
+# being classified on the plot
+cutoff_yfas <- sort(yfas$YFAS_score) %>%
+  nth(., (nrow(eds) - as.integer(n_addiction)))
+```
+
+```{r}
+#| label: "plot_distribution_experiment_2"
+#| echo: true
+
+# Labels
+labels <- c(EAT26_total = "EAT", 
+            COHS_total = "COHS",
+            PSS_total = "PSS",
+            IAT_total = "IAT", 
+            PCLS_total = "PCLS", 
+            OCIR_total = "OCI", 
+            STICSAT_total = "STICSA-T",
+            UPPS_total = "UPPS",
+            SASSV_total ="SASSV" ,
+            GAS_total = "GAS",
+            EDSR_total = "EDS",
+            LSAS_total = "LSAS",
+            YFAS_score = "mYFAS",
+            QABB_total = "QABB",
+            CESD_total = "CES-D")
+
+cutoff_values <- tribble(
+  ~questionnaire, ~cutoff,
+  # CES-D
+  # Morin, A. J. S., Moullec, G., Maïano, C., Layet, L., Just, J.-L., & Ninot, 
+  # G. (2011). Psychometric properties of the Center for Epidemiologic Studies 
+  # Depression Scale (CES-D) in French clinical and nonclinical adults. Revue 
+  # d’Épidémiologie et de Santé Publique, 59(5), 327–340.
+  # https://doi.org/10.1016/j.respe.2011.03.061
+  "CESD_total",   19,
+
+  # EAT
+  # Leichner, P., Steiger, H., & Gottheil, N. (1994). Validation d’une échelle
+  # d’attitudes alimentaires auprès d’une population québécoise francophone. 
+  # 39(1).
+  "EAT26_total",  20,
+  
+  # IAT
+  # Khazaal, Y., Billieux, J., Thorens, G., Khan, R., Louati, Y., Scarlatti,
+  # E., Theintz, F., Lederrey, J., Van Der Linden, M., & Zullino, D. (2008). 
+  # French Validation of the Internet Addiction Test. CyberPsychology & 
+  # Behavior, 11(6), 703–706. https://doi.org/10.1089/cpb.2007.0249
+  "IAT_total",    50,
+  
+  # OCI-R
+  # Abramowitz, J. S., & Deacon, B. J. (2006). Psychometric properties and 
+  # construct validity of the Obsessive–Compulsive Inventory—Revised: 
+  # Replication and extension with a clinical sample. Journal of Anxiety 
+  # Disorders, 20(8), 1016–1035. https://doi.org/10.1016/j.janxdis.2006.03.001
+  "OCIR_total",   14,
+  
+  # PMPUQ
+  # No cutoff score exists
+  # Harris, B., Regan, T., Schueler, J., & Fields, S. A. (2020). Problematic 
+  # Mobile Phone and Smartphone Use Scales: A Systematic Review. Frontiers in 
+  # Psychology, 11. https://doi.org/10.3389/fpsyg.2020.00672
+  
+  # PSS
+  # No cutoff score exists
+  # We could use the normative data from the French PSS-10
+  
+  # UPPS
+  # No cutoff score exists
+  
+  # EDS-R
+  # No cutoff score, but calculation to determine if at-risk of dependence
+  "EDSR_total", cutoff_eds,
+  
+  # GAS
+  # No cutoff score, but calculation to determine if excessive above
+  "GAS_total", cutoff_gas,
+
+  # LSAS
+  # Caballo, V. E., Salazar, I. C., Arias, V., Hofmann, S. G., & Curtiss, J. 
+  # (2018). Psychometric properties of the Liebowitz Social Anxiety Scale in a 
+  # large cross-cultural Spanish and Portuguese speaking sample. Brazilian 
+  # Journal of Psychiatry, 41, 122–130. 
+  # https://doi.org/10.1590/1516-4446-2018-0006
+  "LSAS_total", 60,
+  
+  # PCLS
+  # Blanchard, E. B., Jones-Alexander, J., Buckley, T. C., & Forneris, 
+  # C. A. (1996). Psychometric properties of the PTSD checklist (PCL). Behaviour
+  # Research and Therapy, 34(8), 669–673.
+  # https://doi.org/10.1016/0005-7967(96)00033-2
+  "PCLS_total", 44,
+  
+  # QABB
+  # Lejoyeux, M., Mathieu, K., Embouazza, H., Huet, F., & Lequen, V. (2007). 
+  # Prevalence of compulsive buying among customers of a Parisian general store.
+  # Comprehensive Psychiatry, 48(1), 42–46. 
+  # https://doi.org/10.1016/j.comppsych.2006.05.005
+  "QABB_total", 10,
+  
+  # SASSV
+  # Lopez-Fernandez, O. (2017). Short version of the Smartphone Addiction Scale 
+  # adapted to Spanish and French: Towards a cross-cultural research in 
+  # problematic mobile phone use. Addictive Behaviors, 64, 275–280. 
+  # https://doi.org/10.1016/j.addbeh.2015.11.013
+  "SASSV_total", 32,
+  
+  # STICSA-T
+  # Van Dam, N. T., Gros, D. F., Earleywine, M., & Antony, M. M. (2013). 
+  # Establishing a trait anxiety threshold that signals likelihood of anxiety 
+  # disorders. Anxiety, Stress, & Coping, 26(1), 70–86. 
+  # https://doi.org/10.1080/10615806.2011.631525
+  "STICSAT_total", 43,
+  
+  # YFAS
+  # No cutoff score, but calculation to determine if addiction present above
+  "YFAS_score", cutoff_yfas
+)
+
+# Plot questionnaire distributions
+pp <- ggplot(data = experiment_2_questionnaires, aes (x = score, fill = questionnaire)) +
+  facet_wrap(
+    ~ questionnaire,
+    scales = "free",
+    labeller = labeller(questionnaire = labels)
+    ) +
+  geom_histogram(aes(y=..density..), alpha=0.6) +
+  geom_density(aes(color = questionnaire), alpha = 0.3) +
+  geom_vline(
+    data = cutoff_values, 
+    mapping = aes(xintercept = cutoff),
+    linetype = "dashed") +
+  scale_fill_viridis_d(
+    name = "Questionnaires", 
+    begin = .1, end = .9,
+    option = "inferno",
+    aesthetics = c("color", "fill"),
+    labels = labels) +
+  theme_bw() +
+  labs(
+    title = "",
+    x = "Experiment 2 questionnaires",
+    y = ""
+  )
+
+# Plot formatting
+ppp_2 <- pp + 
+  theme_bw(base_size = 10, base_family = "Helvetica") +
+  theme(
+    strip.text.x = element_text(size = 10),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.background = element_rect(color = "white", fill = "white", linetype = "solid"),
+    axis.ticks.x = element_blank(),
+    axis.text.x  = element_blank(),
+    axis.title.x = element_text(size = 13),
+    axis.title.y = element_text(size = 13),
+    legend.position = "none"
+    )
+
+ppp_2
+```
+
+## Create joint figure
 
 ```{r}
 #| label: "plot_questionnaire_distribution_both"
-#| echo: TRUE
-
+#| echo: true
 
 p <- ggarrange(
   ppp_1, ppp_2, labels = c("A", "B"),
@@ -1211,9 +1362,93 @@ p <- ggarrange(
 
 ggsave(
   filename = str_c(
-    figures_path, "/Figure_Questionnaires_distribution_revision.pdf"),
+    figures_path, "/questionnaires_distribution_revision.pdf"),
   plot = p,
   height = 6,
   width = 11)
 ```
 
+# Create joint figure of COHS subscales
+
+```{r}
+#| label: "plot_cohs_distribution_both"
+#| echo: true
+
+experiment_1_cohs <- readRDS(str_c(results_path, "/experiment_1_cohs.rds"))
+experiment_2_cohs <- readRDS(str_c(results_path, "/experiment_2_cohs.rds"))
+
+labels <- c(routine = "COHS Routine",
+            automaticity = "COHS Automaticity",
+            total = "COHS Total")
+
+# Plot Experiment 1
+pp_1 = ggplot(data = experiment_1_cohs, aes (x = value, fill = scale)) +
+  facet_wrap(~scale, scales = "free", labeller = labeller(scale = labels)) +
+  geom_histogram(aes(y=..density..),alpha=0.6) +
+  geom_density(aes(color = scale), alpha = 0.3) +
+    scale_fill_viridis_d(name = "Questionnaires", 
+                       begin = .1, end = .9,
+                       option = "inferno",
+                       aesthetics = c("color", "fill"),
+                       labels = labels)+
+  theme_bw()+
+  labs(
+    title = '',
+    x = "Experiment 1",
+    y = "Frequency"
+  )
+
+# Make plot nicer
+ppp_1 <-   pp_1 + theme_bw(base_size = 10, base_family = "Helvetica")+
+  theme(strip.text.x = element_text(size = 10, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(color="white", fill="white", linetype="solid"),
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold"),
+        legend.position = "none")
+
+# Plot Experiment 2
+pp_2 = ggplot(data = experiment_2_cohs, aes (x = value, fill = scale)) +
+  facet_wrap(~scale, scales = "free", labeller = labeller(scale = labels)) +
+  geom_histogram(aes(y=..density..),alpha=0.6) +
+  geom_density(aes(color = scale), alpha = 0.3) +
+    scale_fill_viridis_d(name = "Questionnaires", 
+                       begin = .1, end = .9,
+                       option = "inferno",
+                       aesthetics = c("color", "fill"),
+                       labels = labels)+
+  theme_bw()+
+  labs(
+    title = '',
+    x = "Experiment 2",
+    y = "Frequency"
+  )
+
+# Make plot nicer
+ppp_2 <-   pp_2 + theme_bw(base_size = 10, base_family = "Helvetica")+
+  theme(strip.text.x = element_text(size = 10, face = "bold"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(color="white", fill="white", linetype="solid"),
+        # axis.ticks.x = element_blank(),
+        # axis.text.x  = element_blank(),
+        axis.title.x = element_text(size = 15, face = "bold"),
+        axis.title.y = element_text(size = 15, face = "bold"),
+        legend.position = "none")
+
+# Create joint figure
+p <- ggarrange(
+  ppp_1, ppp_2, labels = c("A", "B"), align = "v",
+  nrow = 2,
+  widths = c(1, 1.3)
+  )
+p
+
+ggsave(
+  filename = str_c(
+    figures_path, "/cohs_distribution_revision.pdf"),
+  plot = p,
+  height = 6,
+  width = 11)
+```

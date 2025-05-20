@@ -1,21 +1,16 @@
 # Differential influence of habit components on compulsive and problematic reward-seeking behavior
 
+## Overview
 
-## Analysis
+This repository contains all code and data used in the analyses included in Wuensch, Stussi, Vernede, Murray, Sander, Péron, & Pool, 2025.
 
-Rmd code and htlm report for experiment 1, experiment 2 and the symptom network
+## Content
 
-## Databases
-
-compiled databases of experiment 1 (three classes B1, B2 and B3) and experiment 2
-
-## Figures
-
-output folder with the figures produced by the Rmd code
-
-## R
-
-custom made R functions and setup
+- analysis: code and reports for the analyses presented in the manuscript
+- databases: compiled databases for Experiment 1 (three classes: B1, B2, B3) and Experiment 2
+- figures: figures produced by the analysis code 
+- renv: [renv](https://rstudio.github.io/renv/) project library 
+- results: intermediate analysis databases
 
 ## License
 
