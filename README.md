@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains all code and data used in the analyses included in Wuensch, Stussi, Vernede, Murray, Sander, Péron, & Pool, 2025.
+This repository contains all code and data used in the analyses included in [Wuensch, Stussi, Vernede, Murray, Sander, Péron, & Pool, 2025, *PLOS Mental Health*](https://doi.org/10.1371/journal.pmen.0000323).
 
 ## Content
 
@@ -14,4 +14,4 @@ This repository contains all code and data used in the analyses included in Wuen
 
 ## License
 
-All of the code is licensed under [MIT](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/LICENSE). All of the data is licensed under [CC-BY-4.0](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/databases/LICENSE). 
+All of the code is licensed under [MIT](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/LICENSE). All of the data is licensed under [CC-BY-4.0](https://github.com/Affect-Learning-Decisions-Lab/Habit_Affect/blob/main/databases/LICENSE).
